@@ -5,7 +5,7 @@ Resources:
   FrontendS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: DevAssist-portal
+      BucketName: dev-assist-portal
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
@@ -14,7 +14,7 @@ Resources:
   BackendS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: DevAssist-backend  # Unique bucket name
+      BucketName: dev-assist-backend  # Unique bucket name
       AccessControl: Private
       VersioningConfiguration:
         Status: Enabled
