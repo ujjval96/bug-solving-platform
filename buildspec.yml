@@ -5,22 +5,25 @@ phases:
     runtime-versions:
       nodejs: 14  # Specify Node.js version
     commands:
-      - echo Installing backend dependencies...
-      - cd backend && npm install
-      - echo Installing frontend dependencies...
-      - cd ../frontend && npm install
+      - echo "Installing backend dependencies..."
+      - cd backend && npm install  # Install backend dependencies
+      - echo "Installing frontend dependencies..."
+      - cd ../frontend && npm install  # Install frontend dependencies
+
   build:
     commands:
-      - echo Building backend...
-      - cd ../backend && npm run build
-      - echo Building frontend...
-      - cd ../frontend && npm run build
+      - echo "Building backend..."
+      - cd ../backend && npm run build  # Build backend
+      - echo "Building frontend..."
+      - cd ../frontend && npm run build  # Build frontend
+
   post_build:
     commands:
-      - echo "Current Directory: $(pwd)"
-      - echo "Listing files in aws/cloudformation"
-      - ls aws/cloudformation
-      - echo Deploying CloudFormation stack...
-      - aws cloudformation deploy --template-file aws/cloudformation/template.yml --stack-name DevAssistStack --capabilities CAPABILITY_IAM
-      - echo Deploying frontend to S3...
-      - aws s3 cp frontend/build s3://DevAssist-portal/ --recursive
+      - echo "Current Directory:"
+      - pwd  # Display current directory
+      - echo "Listing files in aws/cloudformation"  # List contents for debugging
+      - ls aws/cloudformation  # List contents of the cloudformation directory
+      - echo "Deploying CloudFormation stack..."
+      - aws cloudformation deploy --template-file aws/cloudformation/template.yml --stack-name DevAssistStack --capabilities CAPABILITY_IAM  # Deploy CloudFormation stack
+      - echo "Deploying frontend to S3..."
+      - aws s3 cp frontend/build s3://DevAssist-portal/ --recursive  # Copy frontend build to S3 bucket
