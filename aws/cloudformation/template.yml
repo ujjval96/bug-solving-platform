@@ -6,16 +6,33 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: dev-assist-portal
-      AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: error.html
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        IgnorePublicAcls: false
+        BlockPublicPolicy: false
+        RestrictPublicBuckets: false
+
+  # S3 Bucket Policy to allow public access for the Frontend bucket
+  FrontendS3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref FrontendS3Bucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: "*"
+            Action: s3:GetObject
+            Resource: !Sub "${FrontendS3Bucket.Arn}/*"
 
   BackendS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: dev-assist-backend  # Unique bucket name
-      AccessControl: Private
       VersioningConfiguration:
         Status: Enabled
 
