@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Create S3 buckets for frontend and backend deployment
+
+Resources:
+  FrontendS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: DevAssist-portal
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+
+  BackendS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: DevAssist-backend  # Unique bucket name
+      AccessControl: Private
+      VersioningConfiguration:
+        Status: Enabled
+
+Outputs:
+  FrontendBucketWebsiteURL:
+    Description: "Frontend S3 Bucket URL"
+    Value: !GetAtt FrontendS3Bucket.WebsiteURL

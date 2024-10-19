@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14  # Specify Node.js version
+    commands:
+      - echo Installing backend dependencies...
+      - cd backend && npm install
+      - echo Installing frontend dependencies...
+      - cd ../frontend && npm install
+  build:
+    commands:
+      - echo Building backend...
+      - cd backend && npm run build
+      - echo Building frontend...
+      - cd ../frontend && npm run build
+  post_build:
+    commands:
+      - echo Deploying CloudFormation stack...
+      - aws cloudformation deploy --template-file aws/cloudformation/template.yml --stack-name DevAssistStack --capabilities CAPABILITY_IAM
+      - echo Deploying frontend to S3...
+      - aws s3 cp frontend/build s3://DevAssist-portal/ --recursive
