@@ -17,6 +17,9 @@ phases:
       - cd ../frontend && npm run build
   post_build:
     commands:
+      - echo "Current Directory: $(pwd)"
+      - echo "Listing files in aws/cloudformation"
+      - ls aws/cloudformation
       - echo Deploying CloudFormation stack...
       - aws cloudformation deploy --template-file aws/cloudformation/template.yml --stack-name DevAssistStack --capabilities CAPABILITY_IAM
       - echo Deploying frontend to S3...
