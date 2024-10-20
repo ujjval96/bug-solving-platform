@@ -3,25 +3,39 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 14  # Specify Node.js version
+      nodejs: 14
     commands:
       - echo "Installing backend dependencies..."
-      - cd backend && npm install  # Install backend dependencies
+      - cd backend && npm install
       - echo "Installing frontend dependencies..."
-      - cd ../frontend && npm install  # Install frontend dependencies
+      - cd ../frontend && npm install
 
   build:
     commands:
       - echo "Building backend..."
-      - cd ../backend && npm run build  # Build backend
+      - cd ../backend && npm run build
       - echo "Building frontend..."
-      - cd ../frontend && npm run build  # Build frontend
+      - cd ../frontend && npm run build
 
   post_build:
     commands:
-      - echo "Current Directory:"
-      - pwd  # Display current directory
-      - echo "Listing files in aws/cloudformation"  # List contents for debugging
-      - ls ../aws/cloudformation  # List contents of the cloudformation directory
+      - echo "Packaging Lambda function..."
+      - aws cloudformation package \
+            --template-file ../aws/cloudformation/template.yml \
+            --output-template-file ../aws/cloudformation/packaged-template.yml \
+            --s3-bucket $S3_BUCKET_NAME
       - echo "Deploying CloudFormation stack..."
-      - aws cloudformation deploy --template-file ../aws/cloudformation/template.yml --stack-name DevAssistStack --capabilities CAPABILITY_IAM  # Deploy CloudFormation stack
+      - aws cloudformation deploy \
+            --template-file ../aws/cloudformation/packaged-template.yml \
+            --stack-name $STACK_NAME \
+            --capabilities CAPABILITY_IAM
+
+artifacts:
+  files:
+    - ../aws/cloudformation/packaged-template.yml
+
+env:
+  variables:
+    S3_BUCKET_NAME: dev-assist-artifacts
+    STACK_NAME: DevAssistStack
+    AWS_REGION: us-east-1

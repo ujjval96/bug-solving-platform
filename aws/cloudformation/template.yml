@@ -1,6 +1,12 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Create S3 buckets for frontend and backend deployment
 
+Parameters:
+  apiName:
+    Type: String
+  type:
+    Type: String
+
 Resources:
   FrontendS3Bucket:
     Type: AWS::S3::Bucket
@@ -36,7 +42,33 @@ Resources:
       VersioningConfiguration:
         Status: Enabled
 
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Name: !Sub "dev-assist-api"
+
+  UserRegistrationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/user-registration.userRegistration
+      Description: use to register user
+      CodeUri: ./src
+      Runtime: nodejs14.x
+      Tracing: Active
+      Events:
+         Api:
+            Type: Api
+            Properties:
+              RestApiId: !Ref ApiGateway
+              Path: /request/users/registration
+              Method: POST
+
 Outputs:
   FrontendBucketWebsiteURL:
     Description: "Frontend S3 Bucket URL"
     Value: !GetAtt FrontendS3Bucket.WebsiteURL
+  
+  ApiUrl:
+    Description: "The URL of the API Gateway"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
