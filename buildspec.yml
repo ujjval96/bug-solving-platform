@@ -19,23 +19,16 @@ phases:
 
   post_build:
     commands:
-      - echo "Packaging Lambda function..."
-      - aws cloudformation package \
-            --template-file ../aws/cloudformation/template.yml \
-            --output-template-file ../aws/cloudformation/packaged-template.yml \
-            --s3-bucket $S3_BUCKET_NAME
+      - echo "Current Directory:"
+      - pwd
+      - echo "Listing files in aws/cloudformation"
+      - ls ../aws/cloudformation
       - echo "Deploying CloudFormation stack..."
-      - aws cloudformation deploy \
-            --template-file ../aws/cloudformation/packaged-template.yml \
-            --stack-name $STACK_NAME \
-            --capabilities CAPABILITY_IAM
+      - aws cloudformation package \
+          --template-file ../aws/cloudformation/template.yml \
+          --output-template-file ../aws/cloudformation/packaged-template.yml \
+          --s3-bucket dev-assist-backend
 
 artifacts:
   files:
     - ../aws/cloudformation/packaged-template.yml
-
-env:
-  variables:
-    S3_BUCKET_NAME: dev-assist-backend
-    STACK_NAME: DevAssistStack
-    AWS_REGION: us-east-1
