@@ -25,5 +25,3 @@ phases:
       - ls ../aws/cloudformation  # List contents of the cloudformation directory
       - echo "Deploying CloudFormation stack..."
       - aws cloudformation deploy --template-file ../aws/cloudformation/template.yml --stack-name DevAssistStack --capabilities CAPABILITY_IAM  # Deploy CloudFormation stack
-      - echo "Deploying frontend to S3..."
-      - aws s3 cp frontend/build s3://dev-assist-portal/ --recursive  # Copy frontend build to S3 bucket
