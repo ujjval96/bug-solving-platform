@@ -36,6 +36,6 @@ artifacts:
 
 env:
   variables:
-    S3_BUCKET_NAME: dev-assist-artifacts
+    S3_BUCKET_NAME: dev-assist-backend
     STACK_NAME: DevAssistStack
     AWS_REGION: us-east-1
