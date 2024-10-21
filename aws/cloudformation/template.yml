@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Create S3 buckets for frontend and backend deployment
-
+Transform: AWS::Serverless-2016-10-31
+Description: A simple example for AWS SAM
 
 Resources:
   FrontendS3Bucket:
