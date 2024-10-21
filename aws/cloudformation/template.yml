@@ -1,11 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Create S3 buckets for frontend and backend deployment
 
-Parameters:
-  apiName:
-    Type: String
-  type:
-    Type: String
 
 Resources:
   FrontendS3Bucket:
