@@ -24,8 +24,8 @@ phases:
       - echo "Listing files in aws/cloudformation"
       - ls ../aws/cloudformation
       - echo "Deploying CloudFormation stack..."
-      - aws cloudformation package --template-file ../aws/cloudformation/template.yml --output-template-file ../aws/cloudformation/packaged-template.yml --s3-bucket dev-assist-backend
+      - aws cloudformation package --template-file ../aws/cloudformation/template.yml --output-template-file aws/cloudformation/packaged-template.yml --s3-bucket dev-assist-backend
 
 artifacts:
   files:
-    - ../aws/cloudformation/packaged-template.yml
+    - aws/cloudformation/packaged-template.yml
