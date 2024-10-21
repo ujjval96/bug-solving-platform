@@ -43,22 +43,6 @@ Resources:
       StageName: Prod
       Name: !Sub "dev-assist-api"
 
-  UserRegistrationFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: src/handlers/user-registration.userRegistration
-      Description: use to register user
-      CodeUri: ../../backend/src
-      Runtime: nodejs14.x
-      Tracing: Active
-      Events:
-         Api:
-            Type: Api
-            Properties:
-              RestApiId: !Ref ApiGateway
-              Path: /request/users/registration
-              Method: POST
-
   UserRegistrationRole:
     Type: AWS::IAM::Role
     Properties:
@@ -79,8 +63,27 @@ Resources:
                   - logs:CreateLogGroup
                   - logs:CreateLogStream
                   - logs:PutLogEvents
+                  - s3:GetObject
                 Resource: arn:aws:logs:*:*:*
 
+  UserRegistrationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/user-registration.userRegistration
+      Description: use to register user
+      CodeUri: ../../backend/src
+      Runtime: nodejs14.x
+      Tracing: Active
+      Role: !GetAtt UserRegistrationRole.Arn
+      Events:
+         Api:
+            Type: Api
+            Properties:
+              RestApiId: !Ref ApiGateway
+              Path: /request/users/registration
+              Method: POST
+
+  
 Outputs:
   FrontendBucketWebsiteURL:
     Description: "Frontend S3 Bucket URL"
