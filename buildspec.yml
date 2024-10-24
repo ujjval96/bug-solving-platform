@@ -26,6 +26,7 @@ phases:
       - echo "Deploying CloudFormation stack..."
       - pwd
       - aws cloudformation package --template-file ../aws/cloudformation/template.yml --output-template-file ../aws/cloudformation/packaged-template.yml --s3-bucket dev-assist-backend
+      - pwd
       - aws cloudformation deploy --template-file ../aws/cloudformation/packaged-template.yml --stack-name DevAssistStack --capabilities CAPABILITY_IAM
 
 artifacts:
