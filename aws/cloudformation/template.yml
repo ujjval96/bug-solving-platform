@@ -43,31 +43,6 @@ Resources:
       StageName: Prod
       Name: !Sub "dev-assist-api"
 
-  UserRegistrationRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: lambda.amazonaws.com
-            Action: sts:AssumeRole
-      Policies:
-        - PolicyName: LambdaExecutionPolicy
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogGroup
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                  - s3:GetObject
-                Resource: 
-                  - arn:aws:logs:*:*:*
-                  - !Sub "${BackendS3Bucket.Arn}/*"  # Grant access to Backend S3 Bucket
-
   UserRegistrationFunction:
     Type: AWS::Serverless::Function
     Properties:
