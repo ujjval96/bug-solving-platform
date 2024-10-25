@@ -66,27 +66,27 @@ Resources:
             - Effect: Allow
               Action:
                 - logs:CreateLogGroup
-              Resource: arn:aws:logs:ap-south-1:346511586598:log-group:/aws/lambda/UserRegistrationFunction
+              Resource: 
+                - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${UserRegistrationFunction}:*
             - Effect: Allow
               Action:
                 - logs:CreateLogStream
                 - logs:PutLogEvents
               Resource:
-                - >-
-                  arn:aws:logs:ap-south-1:346511586598:log-group:/aws/lambda/UserRegistrationFunction:*
+                - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${UserRegistrationFunction}:*
       RecursiveLoop: Terminate
       Events:
-         Api:
-            Type: Api
-            Properties:
-              RestApiId: !Ref ApiGateway
-              Path: /request/users/registration
-              Method: POST
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /request/users/registration
+            Method: POST
       SnapStart:
         ApplyOn: None
       RuntimeManagementConfig:
         UpdateRuntimeOn: Auto
-
+        
 Outputs:
   FrontendBucketWebsiteURL:
     Description: "Frontend S3 Bucket URL"
