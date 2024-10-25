@@ -76,7 +76,6 @@ Resources:
       CodeUri: ../../backend/src
       Runtime: nodejs14.x
       Tracing: Active
-      Role: !GetAtt UserRegistrationRole.Arn  # Ensure to get the ARN here
       Events:
          Api:
             Type: Api
