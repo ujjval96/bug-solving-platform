@@ -43,14 +43,38 @@ Resources:
       StageName: Prod
       Name: !Sub "dev-assist-api"
 
+
   UserRegistrationFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: src/handlers/user-registration.userRegistration
-      Description: use to register user
       CodeUri: ../../backend/src
-      Runtime: nodejs14.x
-      Tracing: Active
+      Description: 'UserRegistrationFunction'
+      MemorySize: 128
+      Timeout: 3
+      Handler: src/handlers/user-registration.userRegistration
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      EphemeralStorage:
+        Size: 512
+      EventInvokeConfig:
+        MaximumEventAgeInSeconds: 21600
+        MaximumRetryAttempts: 2
+      PackageType: Zip
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+              Resource: arn:aws:logs:ap-south-1:346511586598:*
+            - Effect: Allow
+              Action:
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource:
+                - >-
+                  arn:aws:logs:ap-south-1:346511586598:log-group:/aws/lambda/UserRegistrationFunction:*
+      RecursiveLoop: Terminate
       Events:
          Api:
             Type: Api
@@ -58,6 +82,10 @@ Resources:
               RestApiId: !Ref ApiGateway
               Path: /request/users/registration
               Method: POST
+      SnapStart:
+        ApplyOn: None
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: Auto
 
 Outputs:
   FrontendBucketWebsiteURL:
