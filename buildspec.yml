@@ -27,6 +27,7 @@ phases:
       - pwd
       - aws cloudformation package --template-file ../aws/cloudformation/template.yml --output-template-file ../aws/cloudformation/packaged-template.yml --s3-bucket dev-assist-backend
       - pwd
+      - ls ../aws/cloudformation
       - aws cloudformation deploy --template-file ../aws/cloudformation/packaged-template.yml --stack-name DevAssistStack --capabilities CAPABILITY_IAM
 
 artifacts:
