@@ -64,7 +64,9 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                   - s3:GetObject
-                Resource: arn:aws:logs:*:*:*
+                Resource: 
+                  - arn:aws:logs:*:*:*
+                  - !Sub "${BackendS3Bucket.Arn}/*"  # Grant access to Backend S3 Bucket
 
   UserRegistrationFunction:
     Type: AWS::Serverless::Function
@@ -74,7 +76,7 @@ Resources:
       CodeUri: ../../backend/src
       Runtime: nodejs14.x
       Tracing: Active
-      Role: !Ref UserRegistrationRole
+      Role: !GetAtt UserRegistrationRole.Arn  # Ensure to get the ARN here
       Events:
          Api:
             Type: Api
@@ -83,7 +85,6 @@ Resources:
               Path: /request/users/registration
               Method: POST
 
-  
 Outputs:
   FrontendBucketWebsiteURL:
     Description: "Frontend S3 Bucket URL"
